@@ -20,12 +20,22 @@ function Character(props) {
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
     setIsLoading(false);
     if (typeof character.episode !== "undefined") {
-      getSubDetails(character.episode).then((res) => setEpisodes(res));
-      setKey(keyGenerator());
+      getSubDetails(character.episode).then((res) => {
+        if (isMounted) setEpisodes(res);
+      });
+      if (isMounted) setKey(keyGenerator());
     }
+    return () => {
+      isMounted = false;
+    };
   }, [character]);
+
+  useEffect(() => {
+    if (typeof character.episode !== "undefined") setKey(keyGenerator());
+  }, [episodes]);
 
   return (
     <View>
@@ -33,7 +43,11 @@ function Character(props) {
         <CharacterSkeleton />
       ) : (
         <View style={style.container}>
-          <CharacterEpisodes character={character} key={key} />
+          <CharacterEpisodes
+            character={character}
+            key={key}
+            episodes={episodes}
+          />
         </View>
       )}
     </View>

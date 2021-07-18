@@ -20,7 +20,7 @@ function CharacterHeader(props) {
   };
 
   return typeof character.origin === "undefined" ? null : (
-    <View key={props.key}>
+    <View>
       <View style={style.imageContainer}>
         <Image style={style.characterImage} source={{ uri: character.image }} />
       </View>
@@ -33,12 +33,17 @@ function CharacterHeader(props) {
             <Text>{character.status}</Text>
           </View>
         </View>
-        <Text>{character.species}</Text>
-        <Text>{character.type}</Text>
-        <Text>{character.gender}</Text>
-        <Text>{character.origin.name}</Text>
-        <Text>{character.location.name}</Text>
-        <Text>{moment(character.created).format("MMMM DD, YYYY hh:mm a")}</Text>
+        <Text style={style.detailsItem}>{character.species}</Text>
+        <Text style={style.detailsItem}>{character.type}</Text>
+        <Text style={style.detailsItem}>{character.gender}</Text>
+        <Text style={style.detailsItem}>{character.origin.name}</Text>
+        <Text style={style.detailsItem}>{character.location.name}</Text>
+        <Text style={style.detailsItem}>
+          {moment(character.created).format("MMMM DD, YYYY hh:mm a")}
+        </Text>
+        <Text style={{ marginTop: 10, textAlign: "center" }}>
+          {character.id}
+        </Text>
       </View>
     </View>
   );

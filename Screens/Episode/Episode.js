@@ -47,7 +47,7 @@ function Episode(props) {
   }, [episode]);
 
   const openCharacterScreen = (url) => {
-    props.navigation.navigate("Character", { url: url });
+    props.navigation.push("Character", { url: url });
   };
 
   const keyExtractor = useCallback((item) => item.id.toString());

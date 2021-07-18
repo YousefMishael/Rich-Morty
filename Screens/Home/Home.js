@@ -43,21 +43,12 @@ function Home(props) {
   };
 
   // change between pages
-  const handleChangePage = (action, url) => {
-    if (action === "NEXT" || action === "PREV") setIsLoading(true);
-
-    switch (action) {
-      case "NEXT":
-        load(info.next);
-        break;
-      case "PREV":
-        load(info.prev);
-        break;
-      case "EPISODE":
-        props.navigation.navigate("Episode", { url: url });
-        break;
-      default:
-        break;
+  const handleChangePage = (action) => {
+    setIsLoading(true);
+    if (action === "NEXT") {
+      load(info.next);
+    } else {
+      load(info.prev);
     }
   };
 
@@ -72,9 +63,7 @@ function Home(props) {
   }, [results]);
 
   const keyExtractor = useCallback((item) => "_" + item.id.toString());
-  const renderItem = useCallback(({ item }) => (
-    <EpisodeCard episode={item} handleChangePage={handleChangePage} />
-  ));
+  const renderItem = useCallback(({ item }) => <EpisodeCard episode={item} />);
   const onScroll = useCallback((e) =>
     scrollY.setValue(e.nativeEvent.contentOffset.y)
   );

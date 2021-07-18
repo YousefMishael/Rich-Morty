@@ -6,23 +6,24 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Divider } from "native-base";
 import moment from "moment";
 import { getSubDetails } from "../Utils/ApiServices";
 import { win, ratio } from "../Utils/AppUtils";
+import { useNavigation } from "@react-navigation/native";
 
 function EpisodeCard(props) {
   //prettier-ignore
   const [episode, ] = useState(props.episode);
   const [images, setImages] = useState([]);
-  const handleChangePage = props.handleChangePage;
   const [activeOpacity, setActiveOpacity] = useState(2);
+  const navigation = useNavigation();
 
-  const handleSwithPage = (action) => {
-    if (action === "EPISODE") {
-      handleChangePage("EPISODE", episode.url);
-    }
+  const handleSwithPage = (action, url) => {
+    if (action === "EPISODE") navigation.push("Episode", { url: episode.url });
+    else navigation.push("Character", { url: url });
   };
 
   useEffect(() => {
@@ -48,18 +49,22 @@ function EpisodeCard(props) {
   const keyExtractor = useCallback((item) => item.id.toString());
   const renderItem = useCallback(({ item }) => (
     <View style={style.imageContainer} onStartShouldSetResponder={() => true}>
-      <Image style={style.characterImage} source={{ uri: item.image }} />
+      <TouchableWithoutFeedback
+        onPress={handleSwithPage.bind(this, "CHARACTER", item.url)}
+      >
+        <Image style={style.characterImage} source={{ uri: item.image }} />
+      </TouchableWithoutFeedback>
     </View>
   ));
 
   return (
-    <TouchableOpacity
-      onPress={handleSwithPage.bind(this, "EPISODE")}
-      //delayPressIn={50}
-      activeOpacity={activeOpacity}
-      style={style.container}
-    >
-      <View style={style.episodeCard}>
+    <View style={style.episodeCard}>
+      <TouchableWithoutFeedback
+        onPress={handleSwithPage.bind(this, "EPISODE")}
+        //delayPressIn={50}
+        activeOpacity={activeOpacity}
+        style={style.container}
+      >
         <View style={style.episodeCardTitle}>
           <View style={style.episodeNameCon}>
             <Text style={style.episodeName} numberOfLines={2}>
@@ -67,22 +72,28 @@ function EpisodeCard(props) {
             </Text>
           </View>
         </View>
+      </TouchableWithoutFeedback>
 
-        <Divider my={2} />
-        <FlatList
-          data={images}
-          horizontal
-          key={"#"}
-          maxToRenderPerBatch={5}
-          windowSize={4}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          onScrollBeginDrag={handleChangeOpacity.bind(this, "SCROLLING")}
-          onScrollEndDrag={handleChangeOpacity.bind(this, "END")}
-          showsHorizontalScrollIndicator={false}
-        />
-        <Divider my={2} />
-
+      <Divider my={2} />
+      <FlatList
+        data={images}
+        horizontal
+        key={"#"}
+        maxToRenderPerBatch={5}
+        windowSize={4}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        onScrollBeginDrag={handleChangeOpacity.bind(this, "SCROLLING")}
+        onScrollEndDrag={handleChangeOpacity.bind(this, "END")}
+        showsHorizontalScrollIndicator={false}
+      />
+      <Divider my={2} />
+      <TouchableWithoutFeedback
+        onPress={handleSwithPage.bind(this, "EPISODE")}
+        //delayPressIn={50}
+        activeOpacity={activeOpacity}
+        style={style.container}
+      >
         <View style={style.episodeCardDetails}>
           <Text style={style.detailsItem}>{episode.episode}</Text>
           <Text style={style.detailsItem}>{episode.air_date}</Text>
@@ -97,8 +108,8 @@ function EpisodeCard(props) {
           </Text>
           <Text style={style.detailsItem}>{episode.id}</Text>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableWithoutFeedback>
+    </View>
   );
 }
 
