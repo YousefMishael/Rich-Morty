@@ -74,6 +74,7 @@ function EpisodeCard(props) {
           <View style={style.episodeNameCon}>
             <MaterialIcons name="movie" size={24} color="black" />
             <Text style={style.episodeName} numberOfLines={2}>
+              {" "}
               {episode.name}
             </Text>
           </View>

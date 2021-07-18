@@ -12,8 +12,10 @@ import { getDetails } from "../../Utils/ApiServices";
 import { Button } from "native-base";
 import HomeSkeleton from "./HomeSkeleton";
 import EpisodeCard from "../../Components/EpisodeCard";
+import { IconButton } from "native-base";
+import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
 
-function Home(props) {
+function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [info, setInfo] = useState({});
   const [results, setResults] = useState([]);
@@ -95,29 +97,32 @@ function Home(props) {
 
           {/* Bottom prev next total episods view start */}
           <Animated.View style={[style.infoContainer, transformY]}>
+            <MaterialIcons
+              style={{ marginLeft: 10 }}
+              name="local-movies"
+              size={24}
+              color="black"
+            />
             <Text>
               Total Episodes:{" "}
               <Text style={style.episodesNumber}>{info.count}</Text>
             </Text>
-            <Button.Group variant="solid" isAttached>
-              <Button
-                isDisabled={info.prev === null ? true : false}
-                colorScheme="danger"
-                _text={{
-                  color: "white",
-                }}
+            <Button.Group ml={"auto"} mr={5} variant="solid" isAttached>
+              <IconButton
                 mr={2}
+                style={{ backgroundColor: "white" }}
+                variant="solid"
+                isDisabled={info.prev === null ? true : false}
                 onPress={handleChangePage.bind(this, "PREV")}
-              >
-                Prev
-              </Button>
-              <Button
-                colorScheme="teal"
+                icon={<EvilIcons name="arrow-left" size={24} color="red" />}
+              />
+              <IconButton
+                style={{ backgroundColor: "white" }}
+                variant="solid"
                 isDisabled={info.next === null ? true : false}
                 onPress={handleChangePage.bind(this, "NEXT")}
-              >
-                Next
-              </Button>
+                icon={<EvilIcons name="arrow-right" size={24} color="black" />}
+              />
             </Button.Group>
           </Animated.View>
           {/* Bottom prev next total episods view end */}
@@ -145,7 +150,6 @@ const style = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
     backgroundColor: "#EDEDED",
     position: "absolute",
     bottom: 0,
