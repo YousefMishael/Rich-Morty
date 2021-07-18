@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./Screens/Home/Home";
 import { NativeBaseProvider } from "native-base";
 import Episode from "./Screens/Episode/Episode";
+import Character from "./Screens/Character/Character";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="Episode" component={Episode} />
+          <Stack.Screen name="Character" component={Character} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

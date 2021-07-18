@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { View, StyleSheet, FlatList, Text, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { getDetails } from "../../Utils/ApiServices";
 import EpisodeSkeleton from "./EpisodeSkeleton";
 import moment from "moment";
@@ -39,10 +46,16 @@ function Episode(props) {
     };
   }, [episode]);
 
+  const openCharacterScreen = (url) => {
+    props.navigation.navigate("Character", { url: url });
+  };
+
   const keyExtractor = useCallback((item) => item.id.toString());
   const renderItem = useCallback(({ item }) => (
     <View style={style.imageContainer} onStartShouldSetResponder={() => true}>
-      <Image style={style.characterImage} source={{ uri: item.image }} />
+      <TouchableOpacity onPress={openCharacterScreen.bind(this, item.url)}>
+        <Image style={style.characterImage} source={{ uri: item.image }} />
+      </TouchableOpacity>
     </View>
   ));
 
@@ -57,7 +70,7 @@ function Episode(props) {
               data={details}
               horizontal
               key={"#"}
-              maxToRenderPerBatch={5}
+              maxToRenderPerBatch={4}
               windowSize={4}
               keyExtractor={keyExtractor}
               renderItem={renderItem}

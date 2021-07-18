@@ -171,4 +171,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default EpisodeCard;
+export default React.memo(EpisodeCard);
