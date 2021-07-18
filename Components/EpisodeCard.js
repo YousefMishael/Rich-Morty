@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -22,6 +22,7 @@ function EpisodeCard(props) {
   const [episode, ] = useState(props.episode);
   const [images, setImages] = useState([]);
   const handleChangePage = props.handleChangePage;
+  const [activeOpacity, setActiveOpacity] = useState(2);
 
   //loading characters images from api
   const getImage = async (isMounted) => {
@@ -60,9 +61,27 @@ function EpisodeCard(props) {
     };
   }, [props.episode]);
 
+  //prevent the hifhlight effect when scrolling for characters
+  const handleChangeOpacity = (type) => {
+    if (type === "SCROLLING") setActiveOpacity(1);
+    else setActiveOpacity(2);
+  };
+
+  const keyExtractor = useCallback(() => "#" + keyGenerator());
+  const renderItem = useCallback(({ item }) => (
+    <View style={style.imageContainer} onStartShouldSetResponder={() => true}>
+      <Image style={style.characterImage} source={{ uri: item }} />
+    </View>
+  ));
+
   return (
-    <View style={style.episodeCard}>
-      <TouchableOpacity onPress={handleSwithPage.bind(this, "EPISODE")}>
+    <TouchableOpacity
+      onPress={handleSwithPage.bind(this, "EPISODE")}
+      //delayPressIn={50}
+      activeOpacity={activeOpacity}
+      style={style.container}
+    >
+      <View style={style.episodeCard}>
         <View style={style.episodeCardTitle}>
           <View style={style.episodeNameCon}>
             <Text style={style.episodeName} numberOfLines={2}>
@@ -70,24 +89,22 @@ function EpisodeCard(props) {
             </Text>
           </View>
         </View>
-      </TouchableOpacity>
-      <Divider my={2} />
-      <FlatList
-        data={images}
-        horizontal
-        key={"#"}
-        // extraData={images}
-        keyExtractor={() => "#" + keyGenerator()}
-        renderItem={({ item }) => (
-          <View style={style.imageContainer}>
-            <Image style={style.characterImage} source={{ uri: item }} />
-          </View>
-        )}
-        // onScroll={() => }
-        showsHorizontalScrollIndicator={false}
-      />
-      <Divider my={2} />
-      <TouchableOpacity onPress={handleSwithPage.bind(this, "EPISODE")}>
+
+        <Divider my={2} />
+        <FlatList
+          data={images}
+          horizontal
+          key={"#"}
+          maxToRenderPerBatch={5}
+          windowSize={4}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          onScrollBeginDrag={handleChangeOpacity.bind(this, "SCROLLING")}
+          onScrollEndDrag={handleChangeOpacity.bind(this, "END")}
+          showsHorizontalScrollIndicator={false}
+        />
+        <Divider my={2} />
+
         <View style={style.episodeCardDetails}>
           <Text style={style.detailsItem}>{episode.episode}</Text>
           <Text style={style.detailsItem}>{episode.air_date}</Text>
@@ -102,12 +119,17 @@ function EpisodeCard(props) {
           </Text>
           <Text style={style.detailsItem}>{episode.id}</Text>
         </View>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }
 
 const style = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    flex: 0.5,
+  },
   episodeCard: {
     marginVertical: 10,
     display: "flex",
@@ -171,4 +193,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default EpisodeCard;
+export default React.memo(EpisodeCard);

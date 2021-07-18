@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   SafeAreaView,
   View,
@@ -52,6 +52,7 @@ function Home(props) {
         break;
       case "PREV":
         load(info.prev);
+        break;
       case "EPISODE":
         props.navigation.navigate("Episode", { url: url });
         break;
@@ -69,6 +70,14 @@ function Home(props) {
   useEffect(() => {
     setIsLoading(false);
   }, [results]);
+
+  const keyExtractor = useCallback((item) => "_" + item.id.toString());
+  const renderItem = useCallback(({ item }) => (
+    <EpisodeCard episode={item} handleChangePage={handleChangePage} />
+  ));
+  const onScroll = useCallback((e) =>
+    scrollY.setValue(e.nativeEvent.contentOffset.y)
+  );
 
   return (
     <SafeAreaView style={style.safeAreaView}>
@@ -88,11 +97,11 @@ function Home(props) {
             contentContainerStyle={style.flatlistContentContainer}
             numColumns={2}
             key={"_"}
-            keyExtractor={(item) => "_" + item.id.toString()}
-            renderItem={({ item }) => (
-              <EpisodeCard episode={item} handleChangePage={handleChangePage} />
-            )}
-            onScroll={(e) => scrollY.setValue(e.nativeEvent.contentOffset.y)}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            onScroll={onScroll}
+            maxToRenderPerBatch={8}
+            windowSize={5}
           />
 
           {/* Bottom prev next total episods view start */}
@@ -140,7 +149,7 @@ const style = StyleSheet.create({
     position: "relative",
     //starts top under the status bar for android devices
     width: "100%",
-    minHeight: "95%",
+    minHeight: "97%",
   },
   infoContainer: {
     padding: 5,
