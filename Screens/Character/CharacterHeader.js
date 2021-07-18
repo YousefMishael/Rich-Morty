@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import { win } from "../../Utils/AppUtils";
 import moment from "moment";
+import {
+  MaterialCommunityIcons,
+  MaterialIcons,
+  FontAwesome,
+  Ionicons,
+  Fontisto,
+} from "@expo/vector-icons";
 
 function CharacterHeader(props) {
   //prettier-ignore
@@ -27,23 +34,43 @@ function CharacterHeader(props) {
 
       <View style={style.detailsContainer}>
         <View style={style.nameContainer}>
-          <Text style={style.episodeName}>{character.name}</Text>
+          <MaterialIcons name="perm-identity" size={24} color="black" />
+          <Text style={style.episodeName}> {character.name}</Text>
           <View style={style.statusContainer}>
             <View style={[style.status, getStatus()]} />
             <Text>{character.status}</Text>
           </View>
         </View>
-        <Text style={style.detailsItem}>{character.species}</Text>
+
+        <View style={style.detailsItem}>
+          <MaterialCommunityIcons name="human" size={24} color="black" />
+          <Text>{character.species}</Text>
+        </View>
         <Text style={style.detailsItem}>{character.type}</Text>
-        <Text style={style.detailsItem}>{character.gender}</Text>
-        <Text style={style.detailsItem}>{character.origin.name}</Text>
-        <Text style={style.detailsItem}>{character.location.name}</Text>
-        <Text style={style.detailsItem}>
-          {moment(character.created).format("MMMM DD, YYYY hh:mm a")}
-        </Text>
-        <Text style={{ marginTop: 10, textAlign: "center" }}>
-          {character.id}
-        </Text>
+        <View style={style.detailsItem}>
+          <FontAwesome name="transgender" size={24} color="black" />
+          <Text> {character.gender}</Text>
+        </View>
+        <View style={style.detailsItem}>
+          <MaterialIcons name="trip-origin" size={24} color="black" />
+          <Text> {character.origin.name}</Text>
+        </View>
+
+        <View style={style.detailsItem}>
+          <Ionicons name="planet" size={24} color="black" />
+          <Text> {character.location.name}</Text>
+        </View>
+        <View style={style.detailsItem}>
+          <Fontisto name="date" size={24} color="black" />
+          <Text>
+            {" "}
+            {moment(character.created).format("MMMM DD, YYYY hh:mm a")}
+          </Text>
+        </View>
+        <View style={style.detailsItemId}>
+          <MaterialCommunityIcons name="identifier" size={24} color="black" />
+          <Text> {character.id}</Text>
+        </View>
       </View>
     </View>
   );
@@ -73,6 +100,16 @@ const style = StyleSheet.create({
   },
   detailsItem: {
     marginTop: 10,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  detailsItemId: {
+    marginTop: 10,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   nameContainer: {
     display: "flex",

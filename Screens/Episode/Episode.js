@@ -6,12 +6,14 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { getDetails } from "../../Utils/ApiServices";
 import EpisodeSkeleton from "./EpisodeSkeleton";
 import moment from "moment";
 import { getSubDetails } from "../../Utils/ApiServices";
 import { win } from "../../Utils/AppUtils";
+import { MaterialIcons, Fontisto } from "@expo/vector-icons";
 
 function Episode(props) {
   //prettier-ignore
@@ -77,15 +79,33 @@ function Episode(props) {
               showsHorizontalScrollIndicator={false}
             />
           </View>
-          <View style={style.detailsContainer}>
-            <Text style={style.episodeName}>{episode.name}</Text>
-            <Text>{episode.episode}</Text>
-            <Text style={style.detailsItem}>Air date: {episode.air_date}</Text>
-            <Text style={style.detailsItem}>
-              Created date:{" "}
-              {moment(episode.created).format("MMMM DD, YYYY hh:mm a")}
-            </Text>
-          </View>
+          <ScrollView>
+            <View style={style.detailsContainer}>
+              <View style={style.detailsItem}>
+                <MaterialIcons name="movie" size={24} color="black" />
+                <Text style={style.episodeName}> {episode.name}</Text>
+              </View>
+              <View style={style.detailsItem}>
+                <MaterialIcons name="local-movies" size={24} color="black" />
+                <Text> {episode.episode}</Text>
+              </View>
+              <View style={style.detailsItem}>
+                <MaterialIcons name="live-tv" size={24} color="black" />
+                <Text style={style.detailsItem}>
+                  {" "}
+                  Air date: {episode.air_date}
+                </Text>
+              </View>
+              <View style={style.detailsItem}>
+                <Fontisto name="date" size={24} color="black" />
+                <Text style={style.detailsItem}>
+                  {" "}
+                  Created date:{" "}
+                  {moment(episode.created).format("MMMM DD, YYYY hh:mm a")}
+                </Text>
+              </View>
+            </View>
+          </ScrollView>
         </View>
       )}
     </View>
@@ -99,7 +119,6 @@ const style = StyleSheet.create({
     minHeight: "100%",
   },
   charactersContainer: {
-    height: "70%",
     marginTop: 10,
   },
   detailsContainer: {
@@ -114,6 +133,9 @@ const style = StyleSheet.create({
   },
   detailsItem: {
     marginTop: 10,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   imageContainer: {
     width: win.width - 10,
@@ -121,7 +143,7 @@ const style = StyleSheet.create({
   },
   characterImage: {
     width: "100%",
-    height: "100%",
+    aspectRatio: 1,
     borderColor: "black",
     borderWidth: 1,
     borderRadius: 5,

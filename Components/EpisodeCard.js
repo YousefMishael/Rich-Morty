@@ -13,6 +13,11 @@ import moment from "moment";
 import { getSubDetails } from "../Utils/ApiServices";
 import { win, ratio } from "../Utils/AppUtils";
 import { useNavigation } from "@react-navigation/native";
+import {
+  MaterialIcons,
+  Fontisto,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 function EpisodeCard(props) {
   //prettier-ignore
@@ -67,6 +72,7 @@ function EpisodeCard(props) {
       >
         <View style={style.episodeCardTitle}>
           <View style={style.episodeNameCon}>
+            <MaterialIcons name="movie" size={24} color="black" />
             <Text style={style.episodeName} numberOfLines={2}>
               {episode.name}
             </Text>
@@ -95,18 +101,35 @@ function EpisodeCard(props) {
         style={style.container}
       >
         <View style={style.episodeCardDetails}>
-          <Text style={style.detailsItem}>{episode.episode}</Text>
-          <Text style={style.detailsItem}>{episode.air_date}</Text>
-          <Text style={style.detailsItem}>
-            {moment(episode.created).format("MMMM DD, YYYY hh:mm a")}
-          </Text>
-          <Text style={style.detailsItem}>
-            Characters:{" "}
-            <Text style={style.charactersLengthText}>
-              {episode.characters.length}
+          <View style={style.detailsItem}>
+            <MaterialIcons name="local-movies" size={24} color="black" />
+            <Text> {episode.episode}</Text>
+          </View>
+          <View style={style.detailsItem}>
+            <MaterialIcons name="live-tv" size={24} color="black" />
+            <Text> {episode.air_date}</Text>
+          </View>
+          <View style={style.detailsItem}>
+            <Fontisto name="date" size={24} color="black" />
+            <Text>
+              {" "}
+              {moment(episode.created).format("MMMM DD, YYYY hh:mm a")}
             </Text>
-          </Text>
-          <Text style={style.detailsItem}>{episode.id}</Text>
+          </View>
+          <View style={style.detailsItem}>
+            <Fontisto name="persons" size={24} color="black" />
+            <Text>
+              {" "}
+              Characters:{" "}
+              <Text style={style.charactersLengthText}>
+                {episode.characters.length}
+              </Text>
+            </Text>
+          </View>
+          <View style={style.detailsItem}>
+            <MaterialCommunityIcons name="identifier" size={24} color="black" />
+            <Text> {episode.id}</Text>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -148,7 +171,7 @@ const style = StyleSheet.create({
     marginRight: "auto",
     height: 32,
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -179,6 +202,9 @@ const style = StyleSheet.create({
   },
   detailsItem: {
     marginVertical: 5,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 

@@ -18,7 +18,7 @@ function CharacterEpisodes(props) {
   const renderItem = useCallback(({ item }) => <EpisodeCard episode={item} />);
 
   return (
-    <View key={props.key}>
+    <View>
       <FlatList
         ListHeaderComponent={listHeaderComponent}
         contentContainerStyle={style.flatlist}

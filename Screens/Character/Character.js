@@ -11,7 +11,7 @@ function Character(props) {
   const [character, setCharacter] = useState({});
   const [episodes, setEpisodes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [key, setKey] = useState(keyGenerator());
+  const [key, setKey] = useState("sadasdasdasdasdas");
 
   useEffect(() => {
     getDetails(characterUrl)
