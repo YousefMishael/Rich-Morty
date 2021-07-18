@@ -5,17 +5,12 @@ import {
   Text,
   FlatList,
   Image,
-  Dimensions,
   TouchableOpacity,
 } from "react-native";
 import { Divider } from "native-base";
 import moment from "moment";
-import { keyGenerator } from "../Utils/AppUtils";
-import { getDetails } from "../Utils/ApiServices";
-
-const win = Dimensions.get("window");
-//image ratio for different devices
-const ratio = win.width / 300;
+import { getSubDetails } from "../Utils/ApiServices";
+import { win, ratio } from "../Utils/AppUtils";
 
 function EpisodeCard(props) {
   //prettier-ignore
@@ -23,29 +18,6 @@ function EpisodeCard(props) {
   const [images, setImages] = useState([]);
   const handleChangePage = props.handleChangePage;
   const [activeOpacity, setActiveOpacity] = useState(2);
-
-  //loading characters images from api
-  const getImage = async (isMounted) => {
-    try {
-      const imgs = [];
-      const promises = [];
-
-      for (const character of episode.characters) {
-        const result = await getDetails(character);
-        imgs.push(result.image);
-        promises.push(result);
-      }
-      Promise.all(promises)
-        .then(() => {
-          if (isMounted) setImages(imgs);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleSwithPage = (action) => {
     if (action === "EPISODE") {
@@ -55,7 +27,13 @@ function EpisodeCard(props) {
 
   useEffect(() => {
     let isMounted = true;
-    getImage(isMounted);
+
+    getSubDetails(episode.characters)
+      .then((res) => {
+        if (isMounted) setImages(res);
+      })
+      .catch((error) => console.error(error));
+
     return () => {
       isMounted = false;
     };
@@ -67,10 +45,10 @@ function EpisodeCard(props) {
     else setActiveOpacity(2);
   };
 
-  const keyExtractor = useCallback(() => "#" + keyGenerator());
+  const keyExtractor = useCallback((item) => item.id.toString());
   const renderItem = useCallback(({ item }) => (
     <View style={style.imageContainer} onStartShouldSetResponder={() => true}>
-      <Image style={style.characterImage} source={{ uri: item }} />
+      <Image style={style.characterImage} source={{ uri: item.image }} />
     </View>
   ));
 
@@ -193,4 +171,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default React.memo(EpisodeCard);
+export default EpisodeCard;

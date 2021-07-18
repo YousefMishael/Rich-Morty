@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import { View, StyleSheet, FlatList, Text, Image } from "react-native";
 import { getDetails } from "../../Utils/ApiServices";
 import EpisodeSkeleton from "./EpisodeSkeleton";
 import moment from "moment";
+import { getSubDetails } from "../../Utils/ApiServices";
+import { win } from "../../Utils/AppUtils";
 
 function Episode(props) {
   //prettier-ignore
   const [episodeUrl, ] = useState(props.route.params.url);
   const [episode, setEpisode] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [firstRender, setFirstRender] = useState(true);
+  const [details, setDetails] = useState([]);
 
   useEffect(() => {
     try {
@@ -24,9 +26,25 @@ function Episode(props) {
   }, []);
 
   useEffect(() => {
-    if (firstRender) setFirstRender(false);
-    else setIsLoading(false);
+    setIsLoading(false);
+    let isMounted = true;
+
+    if (typeof episode.characters !== "undefined")
+      getSubDetails(episode.characters).then((res) => {
+        if (isMounted) setDetails(res);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [episode]);
+
+  const keyExtractor = useCallback((item) => item.id.toString());
+  const renderItem = useCallback(({ item }) => (
+    <View style={style.imageContainer} onStartShouldSetResponder={() => true}>
+      <Image style={style.characterImage} source={{ uri: item.image }} />
+    </View>
+  ));
 
   return (
     <View style={style.container}>
@@ -34,7 +52,18 @@ function Episode(props) {
         <EpisodeSkeleton />
       ) : (
         <View>
-          <View style={style.charactersContainer}></View>
+          <View style={style.charactersContainer}>
+            <FlatList
+              data={details}
+              horizontal
+              key={"#"}
+              maxToRenderPerBatch={5}
+              windowSize={4}
+              keyExtractor={keyExtractor}
+              renderItem={renderItem}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
           <View style={style.detailsContainer}>
             <Text style={style.episodeName}>{episode.name}</Text>
             <Text>{episode.episode}</Text>
@@ -58,8 +87,7 @@ const style = StyleSheet.create({
   },
   charactersContainer: {
     height: "70%",
-    borderWidth: 1,
-    borderColor: "black",
+    marginTop: 10,
   },
   detailsContainer: {
     marginTop: 10,
@@ -73,6 +101,17 @@ const style = StyleSheet.create({
   },
   detailsItem: {
     marginTop: 10,
+  },
+  imageContainer: {
+    width: win.width - 10,
+    marginHorizontal: 5,
+  },
+  characterImage: {
+    width: "100%",
+    height: "100%",
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 5,
   },
 });
 
