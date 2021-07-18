@@ -13,7 +13,7 @@ import { Button } from "native-base";
 import HomeSkeleton from "./HomeSkeleton";
 import EpisodeCard from "../../Components/EpisodeCard";
 
-function Home() {
+function Home(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [info, setInfo] = useState({});
   const [results, setResults] = useState([]);
@@ -42,13 +42,21 @@ function Home() {
     }
   };
 
-  // change page by next and previous buttons
-  const handleChangePage = async (action) => {
-    setIsLoading(true);
-    if (action === "NEXT") {
-      load(info.next);
-    } else {
-      load(info.prev);
+  // change between pages
+  const handleChangePage = (action, url) => {
+    if (action === "NEXT" || action === "PREV") setIsLoading(true);
+
+    switch (action) {
+      case "NEXT":
+        load(info.next);
+        break;
+      case "PREV":
+        load(info.prev);
+      case "EPISODE":
+        props.navigation.navigate("Episode", { url: url });
+        break;
+      default:
+        break;
     }
   };
 
@@ -77,12 +85,13 @@ function Home() {
           {/* Episodes flatlist */}
           <FlatList
             data={results}
-            horizontal={false}
             contentContainerStyle={style.flatlistContentContainer}
             numColumns={2}
             key={"_"}
             keyExtractor={(item) => "_" + item.id.toString()}
-            renderItem={({ item }) => <EpisodeCard episode={item} />}
+            renderItem={({ item }) => (
+              <EpisodeCard episode={item} handleChangePage={handleChangePage} />
+            )}
             onScroll={(e) => scrollY.setValue(e.nativeEvent.contentOffset.y)}
           />
 
