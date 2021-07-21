@@ -71,6 +71,10 @@ function CharacterHeader(props) {
           <MaterialCommunityIcons name="identifier" size={24} color="black" />
           <Text> {character.id}</Text>
         </View>
+        <View style={style.detailsItem}>
+          <MaterialIcons name="movie" size={24} color="black" />
+          <Text> Episodes:</Text>
+        </View>
       </View>
     </View>
   );

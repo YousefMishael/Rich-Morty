@@ -10,17 +10,13 @@ function CharacterEpisodes(props) {
   //prettier-ignore
   const [episodes, ] = useState(props.episodes);
 
-  const listHeaderComponent = useCallback(() => (
-    <CharacterHeader character={character} />
-  ));
-
   const keyExtractor = useCallback((item) => item.id.toString());
   const renderItem = useCallback(({ item }) => <EpisodeCard episode={item} />);
 
   return (
     <View>
       <FlatList
-        ListHeaderComponent={listHeaderComponent}
+        ListHeaderComponent={<CharacterHeader character={character} />}
         contentContainerStyle={style.flatlist}
         data={episodes}
         extraData={episodes}

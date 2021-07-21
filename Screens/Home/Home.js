@@ -50,7 +50,7 @@ function Home(props) {
   };
 
   // change between screens
-  const handleChangeScreen = (action, index) => {
+  const handleChangeScreen = (action, option) => {
     switch (action) {
       case "NEXT":
         setIsLoading(true);
@@ -61,8 +61,12 @@ function Home(props) {
         load(info.prev);
         break;
       case "EPISODE":
-        props.navigation.push("Episode", { url: episodes[index].url });
+        props.navigation.push("Episode", { url: episodes[option].url });
         isOpen ? onClose() : null;
+        break;
+      case "CHAR":
+        props.navigation.push("Character", { url: option });
+        onClose();
         break;
       default:
         break;
@@ -184,7 +188,11 @@ function Home(props) {
   const charKeyExtractror = useCallback((item) => item.id.toString());
   const charRenderItem = useCallback(({ item }) => (
     <View style={{ width: 150 }}>
-      <Image source={{ uri: item.image }} style={style.image} />
+      <TouchableWithoutFeedback
+        onPress={handleChangeScreen.bind(this, "CHAR", item.url)}
+      >
+        <Image source={{ uri: item.image }} style={style.image} />
+      </TouchableWithoutFeedback>
     </View>
   ));
   const charGetItemLayout = useCallback((data, index) => {
