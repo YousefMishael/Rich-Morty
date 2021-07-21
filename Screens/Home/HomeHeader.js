@@ -18,10 +18,13 @@ function HomeHeader(props) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const interval = window.setInterval(
-      () => setIndex((prevIndex) => prevIndex + 1),
-      5000
-    );
+    const interval = window.setInterval(() => {
+      if (index < image.length - 1) {
+        setIndex((prevIndex) =>
+          prevIndex < image.length - 1 ? prevIndex + 1 : 0
+        );
+      } else setIndex((prevIndex) => prevIndex - prevIndex);
+    }, 5000);
 
     return () => {
       clearInterval(interval);
