@@ -14,9 +14,11 @@ function HomeHeader(props) {
   //prettier-ignore
   const [episode, ] = useState(props.episode);
   const [image, setImage] = useState([]);
+  //current image index
   const [index, setIndex] = useState(0);
   const navigation = useNavigation();
 
+  //changing image every 5 seconds
   useEffect(() => {
     const interval = window.setInterval(() => {
       if (index < image.length - 1) {
@@ -31,6 +33,7 @@ function HomeHeader(props) {
     };
   }, [image]);
 
+  //getting selected episode images
   useEffect(() => {
     let isMounted = true;
 
@@ -46,6 +49,7 @@ function HomeHeader(props) {
     };
   }, []);
 
+  //navigation to episode screen when press on "Show"
   const handleChangeScreen = () => {
     navigation.navigate("Episode", { url: episode.url });
   };

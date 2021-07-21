@@ -54,10 +54,12 @@ function Home(props) {
     switch (action) {
       case "NEXT":
         setIsLoading(true);
+        setSelectedEpisodeIndex(-1);
         load(info.next);
         break;
       case "PREV":
         setIsLoading(true);
+        setSelectedEpisodeIndex(-1);
         load(info.prev);
         break;
       case "EPISODE":
@@ -112,11 +114,18 @@ function Home(props) {
     transform: [{ translateY: nextPrevTranslateY }],
   };
 
+  //open action sheet
   const openActionSheet = async (index, characters) => {
+    // openning action sheet
     onOpen();
-    setSelectedEpisodeIndex(index);
-    setKey(keyGenerator());
 
+    // showing characters at images changer
+    if (selectedEpisodeIndex !== index) {
+      setSelectedEpisodeIndex(index);
+      setKey(keyGenerator());
+    }
+
+    //getting selected episode characters and showing them in action sheet
     getSubDetails(characters)
       .then((res) => {
         setLoadedCharacters([...loadedCharacters, res]);
@@ -207,7 +216,7 @@ function Home(props) {
   ));
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ minHeight: "100%" }}>
       <StatusBar
         backgroundColor="#000"
         barStyle="dark-content"

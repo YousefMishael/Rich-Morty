@@ -24,11 +24,13 @@ function EpisodeCard(props) {
   const [images, setImages] = useState([]);
   const navigation = useNavigation();
 
+  //navigation to episode screen when press on episode card
   const handleSwithPage = (action, url) => {
     if (action === "EPISODE") navigation.push("Episode", { url: episode.url });
     else navigation.push("Character", { url: url });
   };
 
+  //getting characters details for showing images from api
   useEffect(() => {
     let isMounted = true;
 
@@ -43,6 +45,7 @@ function EpisodeCard(props) {
     };
   }, [props.episode]);
 
+  //episodes flatlist callbacks
   const keyExtractor = useCallback((item) => item.id.toString());
   const renderItem = useCallback(({ item }) => (
     <View style={style.imageContainer} onStartShouldSetResponder={() => true}>

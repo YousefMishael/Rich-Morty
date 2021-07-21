@@ -22,6 +22,7 @@ function Episode(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [details, setDetails] = useState([]);
 
+  //gettin episode details from api using url from props from home screen
   useEffect(() => {
     try {
       async function getEpisode() {
@@ -34,6 +35,7 @@ function Episode(props) {
     }
   }, []);
 
+  //getting character images from api after getting details of episode
   useEffect(() => {
     setIsLoading(false);
     let isMounted = true;
@@ -48,10 +50,12 @@ function Episode(props) {
     };
   }, [episode]);
 
+  //navigation to character screen when press on character image
   const openCharacterScreen = (url) => {
     props.navigation.push("Character", { url: url });
   };
 
+  //character images flatlist callbacks
   const keyExtractor = useCallback((item) => item.id.toString());
   const renderItem = useCallback(({ item }) => (
     <View style={style.imageContainer} onStartShouldSetResponder={() => true}>

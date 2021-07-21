@@ -13,12 +13,14 @@ function Character(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [key, setKey] = useState("sadasdasdasdasdas");
 
+  //getting character details from api using character url from props
   useEffect(() => {
     getDetails(characterUrl)
       .then((res) => setCharacter(res))
       .catch((error) => console.error(error));
   }, []);
 
+  //getting episodes of character after getting character details
   useEffect(() => {
     let isMounted = true;
     setIsLoading(false);
@@ -33,6 +35,7 @@ function Character(props) {
     };
   }, [character]);
 
+  //showing character details by changing key props to re-render
   useEffect(() => {
     if (typeof character.episode !== "undefined") setKey(keyGenerator());
   }, [episodes]);
