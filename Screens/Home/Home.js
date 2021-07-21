@@ -255,7 +255,7 @@ function Home(props) {
           <Animated.View
             style={[style.screenActionContainer, nextPrevTransformY]}
           >
-            <Text style={{ marginBottom: 10 }}>Screens</Text>
+            <Text style={{ marginBottom: 10 }}>Pages: {info.pages}</Text>
             <Button.Group
               style={{ marginBottom: 10 }}
               variant="solid"
