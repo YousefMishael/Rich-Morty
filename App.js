@@ -1,10 +1,10 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Home from "./Screens/Home/Home";
 import { NativeBaseProvider } from "native-base";
 import Episode from "./Screens/Episode/Episode";
 import Character from "./Screens/Character/Character";
+import Home from "./Screens/Home/Home";
 
 const Stack = createStackNavigator();
 

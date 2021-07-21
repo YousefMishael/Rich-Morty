@@ -5,7 +5,6 @@ import {
   Text,
   FlatList,
   Image,
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Divider } from "native-base";
@@ -23,7 +22,6 @@ function EpisodeCard(props) {
   //prettier-ignore
   const [episode, ] = useState(props.episode);
   const [images, setImages] = useState([]);
-  const [activeOpacity, setActiveOpacity] = useState(2);
   const navigation = useNavigation();
 
   const handleSwithPage = (action, url) => {
@@ -45,12 +43,6 @@ function EpisodeCard(props) {
     };
   }, [props.episode]);
 
-  //prevent the hifhlight effect when scrolling for characters
-  const handleChangeOpacity = (type) => {
-    if (type === "SCROLLING") setActiveOpacity(1);
-    else setActiveOpacity(2);
-  };
-
   const keyExtractor = useCallback((item) => item.id.toString());
   const renderItem = useCallback(({ item }) => (
     <View style={style.imageContainer} onStartShouldSetResponder={() => true}>
@@ -66,8 +58,6 @@ function EpisodeCard(props) {
     <View style={style.episodeCard}>
       <TouchableWithoutFeedback
         onPress={handleSwithPage.bind(this, "EPISODE")}
-        //delayPressIn={50}
-        activeOpacity={activeOpacity}
         style={style.container}
       >
         <View style={style.episodeCardTitle}>
@@ -90,15 +80,11 @@ function EpisodeCard(props) {
         windowSize={4}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
-        onScrollBeginDrag={handleChangeOpacity.bind(this, "SCROLLING")}
-        onScrollEndDrag={handleChangeOpacity.bind(this, "END")}
         showsHorizontalScrollIndicator={false}
       />
       <Divider my={2} />
       <TouchableWithoutFeedback
         onPress={handleSwithPage.bind(this, "EPISODE")}
-        //delayPressIn={50}
-        activeOpacity={activeOpacity}
         style={style.container}
       >
         <View style={style.episodeCardDetails}>

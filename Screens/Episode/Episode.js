@@ -3,17 +3,17 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Text,
   Image,
   TouchableOpacity,
   ScrollView,
+  Text,
 } from "react-native";
 import { getDetails } from "../../Utils/ApiServices";
 import EpisodeSkeleton from "./EpisodeSkeleton";
-import moment from "moment";
 import { getSubDetails } from "../../Utils/ApiServices";
 import { win } from "../../Utils/AppUtils";
 import { MaterialIcons, Fontisto } from "@expo/vector-icons";
+import moment from "moment";
 
 function Episode(props) {
   //prettier-ignore
@@ -66,20 +66,19 @@ function Episode(props) {
       {isLoading ? (
         <EpisodeSkeleton />
       ) : (
-        <View>
-          <View style={style.charactersContainer}>
-            <FlatList
-              data={details}
-              horizontal
-              key={"#"}
-              maxToRenderPerBatch={4}
-              windowSize={4}
-              keyExtractor={keyExtractor}
-              renderItem={renderItem}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
+        <View style={{ minHeight: "100%" }}>
           <ScrollView>
+            <View style={style.charactersContainer}>
+              <FlatList
+                data={details}
+                horizontal
+                key={"#"}
+                maxToRenderPerBatch={4}
+                windowSize={4}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+              />
+            </View>
             <View style={style.detailsContainer}>
               <View style={style.detailsItem}>
                 <MaterialIcons name="movie" size={24} color="black" />
@@ -121,6 +120,17 @@ const style = StyleSheet.create({
   charactersContainer: {
     marginTop: 10,
   },
+  imageContainer: {
+    width: win.width - 10,
+    marginHorizontal: 5,
+  },
+  characterImage: {
+    width: "100%",
+    aspectRatio: 1,
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 5,
+  },
   detailsContainer: {
     marginTop: 10,
     padding: 10,
@@ -136,17 +146,6 @@ const style = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-  },
-  imageContainer: {
-    width: win.width - 10,
-    marginHorizontal: 5,
-  },
-  characterImage: {
-    width: "100%",
-    aspectRatio: 1,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 5,
   },
 });
 
